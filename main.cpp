@@ -22,6 +22,7 @@ int main(int argc, char* args[]) {
 	SDL_Texture* dirtTexture = window.loadTexture("dirt.png");
 	SDL_Texture* stoneTexture = window.loadTexture("stone.png");
 	SDL_Texture* stoneDirtTransistionTexture = window.loadTexture("stoneAndDirtTransition.png");
+	SDL_Texture* woodPlankTexture = window.loadTexture("woodPlank.png");
 
 	vector<Entity> entities;
 
@@ -69,6 +70,16 @@ int main(int argc, char* args[]) {
 				while (SDL_PollEvent(&event)) {
 					if (event.type == SDL_QUIT)
 						gameRunning = false;
+
+					if (SDL_MOUSEBUTTONDOWN == event.type)
+						if (SDL_BUTTON_LEFT == event.button.button) {
+							int mouseX;
+							int mouseY;
+							SDL_GetMouseState(&mouseX, &mouseY);
+							const float entitySize = 32;
+							Vector2f mousePosition{ static_cast<float>(mouseX), static_cast<float>(mouseY)};
+							cout << "Mouse Location: " << "(" << static_cast<float>(mouseX) << ", " << static_cast<float>(mouseY) << ")" << endl;
+						}
 				}
 
 				accumulator -= deltaTime;
