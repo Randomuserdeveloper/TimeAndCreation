@@ -5,6 +5,7 @@
 #include "Entity.h"
 #include "Utilities.h"
 #include <vector>
+#include "BreakableEntity.h"
 
 using namespace std;
 
@@ -24,9 +25,19 @@ int main(int argc, char* args[]) {
 	SDL_Texture* stoneDirtTransistionTexture = window.loadTexture("stoneAndDirtTransition.png");
 	SDL_Texture* woodPlankTexture = window.loadTexture("woodPlank.png");
 
+	vector<Vector2f> buildEntityPositions;
 	vector<Entity> entities;
+	vector<BreakableEntity> breakableEntities;
 
+	const float buildEntitySize = 16; // Build Entities (Entities the player builds) are twice as small as regular entities
 	const int layers = 20;
+	const int rows = 12;
+
+	for (float i = 0; i < layers * 4; i++) {
+		for (float j = 0; j < rows * 4; j++) {
+			buildEntityPositions.push_back(Vector2f{ i * (buildEntitySize * 2), j * (buildEntitySize * 2) });
+		}
+	}
 
 	for (float i = 0; i < layers; i++) {
 		for (float e = 0; e < 7; e++) {
@@ -76,9 +87,15 @@ int main(int argc, char* args[]) {
 							int mouseX;
 							int mouseY;
 							SDL_GetMouseState(&mouseX, &mouseY);
-							const float entitySize = 32;
-							Vector2f mousePosition{ static_cast<float>(mouseX), static_cast<float>(mouseY)};
+							Vector2f mousePosition{ static_cast<float>(mouseX) - buildEntitySize, static_cast<float>(mouseY) - buildEntitySize };
 							cout << "Mouse Location: " << "(" << static_cast<float>(mouseX) << ", " << static_cast<float>(mouseY) << ")" << endl;
+
+							for (auto& location : buildEntityPositions) {
+								if (location.getDistance(mousePosition) <= buildEntitySize) {
+									BreakableEntity woodPlank{ Vector2f{location }, woodPlankTexture };
+									breakableEntities.push_back(woodPlank);
+								}
+							}
 						}
 				}
 
@@ -91,6 +108,9 @@ int main(int argc, char* args[]) {
 
 			for (auto& entity: entities)
 				window.render(entity);
+
+			for (auto& breakableEntity : breakableEntities)
+				window.render(breakableEntity, 1);
 
 			window.display();
 

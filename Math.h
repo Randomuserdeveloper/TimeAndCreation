@@ -17,4 +17,3 @@ private:
 };
 
 ostream& operator<<(ostream& stream, const Vector2f& vector);
-
