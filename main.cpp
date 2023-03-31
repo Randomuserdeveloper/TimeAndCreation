@@ -11,7 +11,8 @@ using namespace std;
 
 enum BuildingBlocks {
 	WOODPLANK = 1,
-	STONEBRICK = 2
+	STONEBRICK = 2,
+	GLASS = 3
 };
 
 int main(int argc, char* args[]) {
@@ -30,6 +31,7 @@ int main(int argc, char* args[]) {
 	SDL_Texture* stoneDirtTransistionTexture = window.loadTexture("stoneAndDirtTransition.png");
 	SDL_Texture* woodPlankTexture = window.loadTexture("woodPlank.png");
 	SDL_Texture * stoneBrickTexture = window.loadTexture("stoneBrick.png");
+	SDL_Texture* glassTexture = window.loadTexture("glass.png");
 
 	vector<Vector2f> buildEntityPositions;
 	vector<Entity> entities;
@@ -71,7 +73,7 @@ int main(int argc, char* args[]) {
 	float accumulator = 0.0f;
 	float currentTime = Utilities::timeInSeconds();
 	const short playerSpeedMultiplier = 4;
-	unsigned int currentBuildingBlock = 0;
+	unsigned short currentBuildingBlock = 0;
 
 		while (gameRunning) {
 			int startTicks = SDL_GetTicks();
@@ -94,6 +96,9 @@ int main(int argc, char* args[]) {
 
 						else if (SDLK_2 == event.key.keysym.sym)
 							currentBuildingBlock = BuildingBlocks::STONEBRICK;
+
+						else if (SDLK_3 == event.key.keysym.sym)
+							currentBuildingBlock = BuildingBlocks::GLASS;
 					}
 
 					if (SDL_MOUSEBUTTONDOWN == event.type)
@@ -108,6 +113,7 @@ int main(int argc, char* args[]) {
 								if (location.getDistance(mousePosition) <= buildEntitySize) {
 									BreakableEntity woodPlank{ Vector2f{location}, woodPlankTexture };
 									BreakableEntity stoneBrick{ Vector2f{location}, stoneBrickTexture };
+									BreakableEntity glass { Vector2f{ location }, glassTexture };
 
 									switch (currentBuildingBlock) {
 									case 1:
@@ -115,6 +121,9 @@ int main(int argc, char* args[]) {
 										break;
 									case 2:
 										breakableEntities.push_back(stoneBrick);
+										break;
+									case 3:
+										breakableEntities.push_back(glass);
 										break;
 									}
 

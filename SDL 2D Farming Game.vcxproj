@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="dirt.png" />
+    <Image Include="glass.png" />
     <Image Include="grass.png" />
     <Image Include="sky.png" />
     <Image Include="stone.png" />

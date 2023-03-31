@@ -73,5 +73,8 @@
     <Image Include="woodPlank.png">
       <Filter>Resource Files\Images</Filter>
     </Image>
+    <Image Include="glass.png">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
   </ItemGroup>
 </Project>
