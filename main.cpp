@@ -9,7 +9,7 @@
 
 using namespace std;
 
-enum BuildingBlocks {
+enum BuildingTiles {
 	WOODPLANK = 1,
 	STONEBRICK = 2,
 	GLASS = 3
@@ -37,13 +37,13 @@ int main(int argc, char* args[]) {
 	vector<Entity> entities;
 	vector<BreakableEntity> breakableEntities;
 
-	const float buildEntitySize = 16; // Build Entities (Entities the player builds) are twice as small as regular entities
+	const float buildEntitySize = 32; // Build Entities (Entities the player builds) are twice as small as regular entities
 	const int layers = 20;
 	const int rows = 12;
 
-	for (float i = 0; i < layers * 2; i++) {
-		for (float j = 0; j < rows * 2; j++) {
-			buildEntityPositions.push_back(Vector2f{ i * (buildEntitySize * 2), j * (buildEntitySize * 2) });
+	for (float i = 0; i < layers; i++) {
+		for (float j = 0; j < rows; j++) {
+			buildEntityPositions.push_back(Vector2f{ i * buildEntitySize, j * buildEntitySize });
 		}
 	}
 
@@ -92,13 +92,13 @@ int main(int argc, char* args[]) {
 
 					if (SDL_KEYDOWN == event.type) {
 						if (SDLK_1 == event.key.keysym.sym) 
-							currentBuildingBlock = BuildingBlocks::WOODPLANK;
+							currentBuildingBlock = BuildingTiles::WOODPLANK;
 
 						else if (SDLK_2 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingBlocks::STONEBRICK;
+							currentBuildingBlock = BuildingTiles::STONEBRICK;
 
 						else if (SDLK_3 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingBlocks::GLASS;
+							currentBuildingBlock = BuildingTiles::GLASS;
 					}
 
 					if (SDL_MOUSEBUTTONDOWN == event.type)
@@ -106,11 +106,11 @@ int main(int argc, char* args[]) {
 							int mouseX;
 							int mouseY;
 							SDL_GetMouseState(&mouseX, &mouseY);
-							Vector2f mousePosition{ static_cast<float>(mouseX) - buildEntitySize, static_cast<float>(mouseY) - buildEntitySize };
+							Vector2f mousePosition{ (static_cast<float>(mouseX) - buildEntitySize) / 2, (static_cast<float>(mouseY) - buildEntitySize) / 2 };
 							cout << "Mouse Location: " << "(" << static_cast<float>(mouseX) << ", " << static_cast<float>(mouseY) << ")" << endl;
 
 							for (auto& location : buildEntityPositions) {
-								if (location.getDistance(mousePosition) <= buildEntitySize) {
+								if (location.getDistance(mousePosition) <= buildEntitySize / 2) {
 									BreakableEntity woodPlank{ Vector2f{location}, woodPlankTexture };
 									BreakableEntity stoneBrick{ Vector2f{location}, stoneBrickTexture };
 									BreakableEntity glass { Vector2f{ location }, glassTexture };
@@ -143,7 +143,7 @@ int main(int argc, char* args[]) {
 				window.render(entity);
 
 			for (auto& breakableEntity : breakableEntities)
-				window.render(breakableEntity, 1);
+				window.render(breakableEntity);
 
 			window.display();
 
