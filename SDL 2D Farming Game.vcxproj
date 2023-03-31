@@ -161,6 +161,7 @@
     <Image Include="sky.png" />
     <Image Include="stone.png" />
     <Image Include="stoneAndDirtTransition.png" />
+    <Image Include="stoneBrick.png" />
     <Image Include="woodPlank.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

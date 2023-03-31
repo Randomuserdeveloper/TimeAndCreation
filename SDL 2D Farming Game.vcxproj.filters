@@ -67,6 +67,9 @@
     <Image Include="stone.png">
       <Filter>Resource Files\Images</Filter>
     </Image>
+    <Image Include="stoneBrick.png">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
     <Image Include="woodPlank.png">
       <Filter>Resource Files\Images</Filter>
     </Image>

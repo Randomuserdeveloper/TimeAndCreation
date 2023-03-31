@@ -9,6 +9,11 @@
 
 using namespace std;
 
+enum BuildingBlocks {
+	WOODPLANK = 1,
+	STONEBRICK = 2
+};
+
 int main(int argc, char* args[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
 		cout << SDL_GetError();
@@ -24,6 +29,7 @@ int main(int argc, char* args[]) {
 	SDL_Texture* stoneTexture = window.loadTexture("stone.png");
 	SDL_Texture* stoneDirtTransistionTexture = window.loadTexture("stoneAndDirtTransition.png");
 	SDL_Texture* woodPlankTexture = window.loadTexture("woodPlank.png");
+	SDL_Texture * stoneBrickTexture = window.loadTexture("stoneBrick.png");
 
 	vector<Vector2f> buildEntityPositions;
 	vector<Entity> entities;
@@ -33,8 +39,8 @@ int main(int argc, char* args[]) {
 	const int layers = 20;
 	const int rows = 12;
 
-	for (float i = 0; i < layers * 4; i++) {
-		for (float j = 0; j < rows * 4; j++) {
+	for (float i = 0; i < layers * 2; i++) {
+		for (float j = 0; j < rows * 2; j++) {
 			buildEntityPositions.push_back(Vector2f{ i * (buildEntitySize * 2), j * (buildEntitySize * 2) });
 		}
 	}
@@ -65,7 +71,7 @@ int main(int argc, char* args[]) {
 	float accumulator = 0.0f;
 	float currentTime = Utilities::timeInSeconds();
 	const short playerSpeedMultiplier = 4;
-	short playerFrame = 1;
+	unsigned int currentBuildingBlock = 0;
 
 		while (gameRunning) {
 			int startTicks = SDL_GetTicks();
@@ -82,6 +88,14 @@ int main(int argc, char* args[]) {
 					if (event.type == SDL_QUIT)
 						gameRunning = false;
 
+					if (SDL_KEYDOWN == event.type) {
+						if (SDLK_1 == event.key.keysym.sym) 
+							currentBuildingBlock = BuildingBlocks::WOODPLANK;
+
+						else if (SDLK_2 == event.key.keysym.sym)
+							currentBuildingBlock = BuildingBlocks::STONEBRICK;
+					}
+
 					if (SDL_MOUSEBUTTONDOWN == event.type)
 						if (SDL_BUTTON_LEFT == event.button.button) {
 							int mouseX;
@@ -92,8 +106,18 @@ int main(int argc, char* args[]) {
 
 							for (auto& location : buildEntityPositions) {
 								if (location.getDistance(mousePosition) <= buildEntitySize) {
-									BreakableEntity woodPlank{ Vector2f{location }, woodPlankTexture };
-									breakableEntities.push_back(woodPlank);
+									BreakableEntity woodPlank{ Vector2f{location}, woodPlankTexture };
+									BreakableEntity stoneBrick{ Vector2f{location}, stoneBrickTexture };
+
+									switch (currentBuildingBlock) {
+									case 1:
+										breakableEntities.push_back(woodPlank);
+										break;
+									case 2:
+										breakableEntities.push_back(stoneBrick);
+										break;
+									}
+
 								}
 							}
 						}
