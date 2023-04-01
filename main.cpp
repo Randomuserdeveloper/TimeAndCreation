@@ -47,23 +47,23 @@ int main(int argc, char* args[]) {
 		}
 	}
 
-	for (float i = 0; i < layers; i++) {
-		for (float e = 0; e < 7; e++) {
-			Entity skyLayer{ Vector2f{i * 32, e * 32}, skyTexture };
-			entities.push_back(skyLayer);
-		}
+	//for (float i = 0; i < layers; i++) {
+	//	for (float e = 0; e < 7; e++) {
+	//		Entity skyLayer{ Vector2f{i * 32, e * 32}, skyTexture };
+	//		entities.push_back(skyLayer);
+	//	}
 
-		Entity grassLayer{Vector2f{i * 32, 200.0}, grassTexture};
-		entities.push_back(grassLayer);
-		Entity dirtLayer1{ Vector2f{i * 32, 232}, dirtTexture };
-		entities.push_back(dirtLayer1);
-		Entity dirtLayer2{ Vector2f{i * 32, 264}, dirtTexture };
-		entities.push_back(dirtLayer2);
-		Entity stoneAndDirtLayer{ Vector2f{i * 32, 296}, stoneDirtTransistionTexture };
-		entities.push_back(stoneAndDirtLayer);
-		Entity stoneLayer{ Vector2f{i * 32, 328}, stoneTexture };
-		entities.push_back(stoneLayer);
-	}
+	//	Entity grassLayer{Vector2f{i * 32, 200.0}, grassTexture};
+	//	entities.push_back(grassLayer);
+	//	Entity dirtLayer1{ Vector2f{i * 32, 232}, dirtTexture };
+	//	entities.push_back(dirtLayer1);
+	//	Entity dirtLayer2{ Vector2f{i * 32, 264}, dirtTexture };
+	//	entities.push_back(dirtLayer2);
+	//	Entity stoneAndDirtLayer{ Vector2f{i * 32, 296}, stoneDirtTransistionTexture };
+	//	entities.push_back(stoneAndDirtLayer);
+	//	Entity stoneLayer{ Vector2f{i * 32, 328}, stoneTexture };
+	//	entities.push_back(stoneLayer);
+	//}
 
 	bool gameRunning = true;
 
