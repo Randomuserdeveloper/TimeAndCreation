@@ -12,7 +12,10 @@ using namespace std;
 enum BuildingBlocks {
 	WOODPLANK = 1,
 	STONEBRICK = 2,
-	GLASS = 3
+	GLASS = 3,
+	GRASS = 4,
+	DIRT = 5,
+	STONE = 6
 };
 
 int main(int argc, char* args[]) {
@@ -91,7 +94,7 @@ int main(int argc, char* args[]) {
 						gameRunning = false;
 
 					if (SDL_KEYDOWN == event.type) {
-						if (SDLK_1 == event.key.keysym.sym) 
+						if (SDLK_1 == event.key.keysym.sym)
 							currentBuildingBlock = BuildingBlocks::WOODPLANK;
 
 						else if (SDLK_2 == event.key.keysym.sym)
@@ -99,6 +102,24 @@ int main(int argc, char* args[]) {
 
 						else if (SDLK_3 == event.key.keysym.sym)
 							currentBuildingBlock = BuildingBlocks::GLASS;
+
+						else if (SDLK_4 == event.key.keysym.sym)
+							currentBuildingBlock = BuildingBlocks::GRASS;
+
+						else if (SDLK_5 == event.key.keysym.sym)
+							currentBuildingBlock = BuildingBlocks::DIRT;
+
+						else if (SDLK_6 == event.key.keysym.sym)
+							currentBuildingBlock = BuildingBlocks::STONE;
+
+						else if (SDLK_b == event.key.keysym.sym) {
+							for (float i = 0; i < layers; i++) {
+								for (float e = 0; e < 12; e++) {
+									Entity skyLayer{ Vector2f{i * 32, e * 32}, skyTexture };
+									entities.insert(entities.begin(), skyLayer);
+								}
+							}
+						}
 					}
 
 					if (SDL_MOUSEBUTTONDOWN == event.type)
@@ -114,6 +135,9 @@ int main(int argc, char* args[]) {
 									BreakableEntity woodPlank{ Vector2f{location}, woodPlankTexture };
 									BreakableEntity stoneBrick{ Vector2f{location}, stoneBrickTexture };
 									BreakableEntity glass { Vector2f{ location }, glassTexture };
+									BreakableEntity grass{ Vector2f{location}, grassTexture };
+									BreakableEntity dirt{ Vector2f{location}, dirtTexture };
+									BreakableEntity stone{ Vector2f{ location }, stoneTexture };
 
 									switch (currentBuildingBlock) {
 									case 1:
@@ -124,6 +148,15 @@ int main(int argc, char* args[]) {
 										break;
 									case 3:
 										breakableEntities.push_back(glass);
+										break;
+									case 4:
+										breakableEntities.push_back(grass);
+										break;
+									case 5:
+										breakableEntities.push_back(dirt);
+										break;
+									case 6:
+										breakableEntities.push_back(stone);
 										break;
 									}
 
