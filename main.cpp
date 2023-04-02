@@ -9,7 +9,7 @@
 
 using namespace std;
 
-enum BuildingBlocks {
+enum BuildingTiles {
 	WOODPLANK = 1,
 	STONEBRICK = 2,
 	GLASS = 3,
@@ -25,7 +25,10 @@ int main(int argc, char* args[]) {
 	if (!(IMG_Init(IMG_INIT_PNG)))
 		cout << SDL_GetError();
 
-	RenderWindow window{"Time and Creation", 1280, 720};
+	const short windowWidth = 1280;
+	const short windowHeight = 720;
+
+	RenderWindow window{"Time and Creation", windowWidth, windowHeight };
 
 	SDL_Texture* skyTexture = window.loadTexture("sky.png");
 	SDL_Texture* grassTexture = window.loadTexture("grass.png");
@@ -35,6 +38,7 @@ int main(int argc, char* args[]) {
 	SDL_Texture* woodPlankTexture = window.loadTexture("woodPlank.png");
 	SDL_Texture * stoneBrickTexture = window.loadTexture("stoneBrick.png");
 	SDL_Texture* glassTexture = window.loadTexture("glass.png");
+	SDL_Texture* inventoryBoxTexture = window.loadTexture("inventoryBox.png");
 
 	vector<Vector2f> buildEntityPositions;
 	vector<Entity> entities;
@@ -43,11 +47,17 @@ int main(int argc, char* args[]) {
 	const float buildEntitySize = 16; // Build Entities (Entities the player builds) are twice as small as regular entities
 	const int layers = 20;
 	const int rows = 12;
+	const short buildingTileAmount = 6;
 
 	for (float i = 0; i < layers * 2; i++) {
 		for (float j = 0; j < rows * 2; j++) {
 			buildEntityPositions.push_back(Vector2f{ i * (buildEntitySize * 2), j * (buildEntitySize * 2) });
 		}
+	}
+
+	for (float i = 0; i < buildingTileAmount; i++) {
+			Entity inventoryBox{ Vector2f{i * 32, 300}, inventoryBoxTexture };
+			entities.push_back(inventoryBox);
 	}
 
 	//for (float i = 0; i < layers; i++) {
@@ -95,26 +105,26 @@ int main(int argc, char* args[]) {
 
 					if (SDL_KEYDOWN == event.type) {
 						if (SDLK_1 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingBlocks::WOODPLANK;
+							currentBuildingBlock = BuildingTiles::WOODPLANK;
 
 						else if (SDLK_2 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingBlocks::STONEBRICK;
+							currentBuildingBlock = BuildingTiles::STONEBRICK;
 
 						else if (SDLK_3 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingBlocks::GLASS;
+							currentBuildingBlock = BuildingTiles::GLASS;
 
 						else if (SDLK_4 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingBlocks::GRASS;
+							currentBuildingBlock = BuildingTiles::GRASS;
 
 						else if (SDLK_5 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingBlocks::DIRT;
+							currentBuildingBlock = BuildingTiles::DIRT;
 
 						else if (SDLK_6 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingBlocks::STONE;
+							currentBuildingBlock = BuildingTiles::STONE;
 
 						else if (SDLK_b == event.key.keysym.sym) {
 							for (float i = 0; i < layers; i++) {
-								for (float e = 0; e < 12; e++) {
+								for (float e = 0; e < rows; e++) {
 									Entity skyLayer{ Vector2f{i * 32, e * 32}, skyTexture };
 									entities.insert(entities.begin(), skyLayer);
 								}
