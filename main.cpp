@@ -43,7 +43,7 @@ int main(int argc, char* args[]) {
 	vector<Entity> entities;
 	vector<BreakableEntity> breakableEntities;
 
-	const float buildEntitySize = 16; // Build Entities (Entities the player builds) are twice as small as regular entities
+	const float buildEntitySize = 16;
 	const int layers = 20;
 	const int rows = 12;
 
