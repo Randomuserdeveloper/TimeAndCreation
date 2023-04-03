@@ -78,7 +78,6 @@ int main(int argc, char* args[]) {
 	const float deltaTime = 0.01f;
 	float accumulator = 0.0f;
 	float currentTime = Utilities::timeInSeconds();
-	const short playerSpeedMultiplier = 4;
 	unsigned short currentBuildingBlock = 0;
 
 		while (gameRunning) {
