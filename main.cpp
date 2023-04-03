@@ -38,7 +38,6 @@ int main(int argc, char* args[]) {
 	SDL_Texture* woodPlankTexture = window.loadTexture("woodPlank.png");
 	SDL_Texture * stoneBrickTexture = window.loadTexture("stoneBrick.png");
 	SDL_Texture* glassTexture = window.loadTexture("glass.png");
-	SDL_Texture* inventoryBoxTexture = window.loadTexture("inventoryBox.png");
 
 	vector<Vector2f> buildEntityPositions;
 	vector<Entity> entities;
@@ -47,17 +46,11 @@ int main(int argc, char* args[]) {
 	const float buildEntitySize = 16; // Build Entities (Entities the player builds) are twice as small as regular entities
 	const int layers = 20;
 	const int rows = 12;
-	const short buildingTileAmount = 6;
 
 	for (float i = 0; i < layers * 2; i++) {
 		for (float j = 0; j < rows * 2; j++) {
 			buildEntityPositions.push_back(Vector2f{ i * (buildEntitySize * 2), j * (buildEntitySize * 2) });
 		}
-	}
-
-	for (float i = 0; i < buildingTileAmount; i++) {
-			Entity inventoryBox{ Vector2f{i * 32, 300}, inventoryBoxTexture };
-			entities.push_back(inventoryBox);
 	}
 
 	//for (float i = 0; i < layers; i++) {
