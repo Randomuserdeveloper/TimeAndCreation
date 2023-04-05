@@ -38,6 +38,7 @@ int main(int argc, char* args[]) {
 	SDL_Texture* woodPlankTexture = window.loadTexture("woodPlank.png");
 	SDL_Texture * stoneBrickTexture = window.loadTexture("stoneBrick.png");
 	SDL_Texture* glassTexture = window.loadTexture("glass.png");
+	SDL_Texture* sunTexture = window.loadTexture("sun.png");
 
 	vector<Vector2f> buildEntityPositions;
 	vector<Entity> entities;
@@ -70,6 +71,8 @@ int main(int argc, char* args[]) {
 	//	Entity stoneLayer{ Vector2f{i * 32, 328}, stoneTexture };
 	//	entities.push_back(stoneLayer);
 	//}
+
+	Entity sun{ Vector2f{0, 25}, sunTexture };
 
 	bool gameRunning = true;
 
@@ -171,6 +174,8 @@ int main(int argc, char* args[]) {
 			}
 
 			const float alpha = accumulator / deltaTime;
+
+			window.render(sun);
 
 			window.clear();
 

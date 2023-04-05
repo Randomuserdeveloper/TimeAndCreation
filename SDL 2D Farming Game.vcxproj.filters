@@ -79,5 +79,8 @@
     <Image Include="inventoryBox.png">
       <Filter>Resource Files\Images</Filter>
     </Image>
+    <Image Include="sun.png">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
   </ItemGroup>
 </Project>
