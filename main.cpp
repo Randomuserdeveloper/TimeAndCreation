@@ -107,11 +107,15 @@ int main(int argc, char* args[]) {
 			else
 				celestialObject.setPosition(Vector2f{ celestialObjectX + 0.25f, celestialObjectY });
 
-			if (phase % 2 == 0)
+			if (phase % 2 == 0) {
 				celestialObject.setTexture(sunTexture);
+				phase = 0;
+ 			}
+
 			else if (phase % 2 == 1)
 				celestialObject.setTexture(moonTexture);
 
+			cout << "Phase: " << phase << endl;
 
 			while (accumulator >= deltaTime) {
 				while (SDL_PollEvent(&event)) {
