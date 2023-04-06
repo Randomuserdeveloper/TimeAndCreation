@@ -9,7 +9,7 @@ Entity::Entity(Vector2f position, SDL_Texture* texture) : position{ position }, 
 	currentFrame.h = 32;
 }
 
-void Entity::setPosition(Vector2f& position) {
+void Entity::setPosition(Vector2f position) {
 	this->position = position;
 }
 

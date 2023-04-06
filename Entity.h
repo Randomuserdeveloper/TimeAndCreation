@@ -7,7 +7,7 @@ class Entity {
 public:
 	Entity(Vector2f position, SDL_Texture* texture);
 
-	void setPosition(Vector2f& position);
+	void setPosition(Vector2f position);
 	Vector2f& getPosition();
 	SDL_Texture* getTexture() const;
 	SDL_Rect getCurrentFrame() const;

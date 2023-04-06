@@ -43,10 +43,11 @@ int main(int argc, char* args[]) {
 	vector<Vector2f> buildEntityPositions;
 	vector<Entity> entities;
 	vector<BreakableEntity> breakableEntities;
-
+	
+	const short sunSize = 128;
 	const float buildEntitySize = 16;
-	const int layers = 20;
-	const int rows = 12;
+	const short layers = 20;
+	const short rows = 12;
 
 	for (float i = 0; i < layers * 2; i++) {
 		for (float j = 0; j < rows * 2; j++) {
@@ -72,7 +73,7 @@ int main(int argc, char* args[]) {
 	//	entities.push_back(stoneLayer);
 	//}
 
-	Entity sun{ Vector2f{0, 25}, sunTexture };
+	Entity sun{ Vector2f{1, 3}, sunTexture };
 
 	bool gameRunning = true;
 
@@ -82,6 +83,7 @@ int main(int argc, char* args[]) {
 	float accumulator = 0.0f;
 	float currentTime = Utilities::timeInSeconds();
 	unsigned short currentBuildingBlock = 0;
+	short direction = 0;
 
 		while (gameRunning) {
 			int startTicks = SDL_GetTicks();
@@ -92,6 +94,17 @@ int main(int argc, char* args[]) {
 			currentTime = newTime;
 
 			accumulator += frameTime;
+
+			float sunX = sun.getPosition().getX();
+			float sunY = sun.getPosition().getY();
+
+			if (sunX >= (static_cast<float>(windowWidth) - sunSize) / 4 || sunX <= 0)
+				direction++;
+
+			if (direction % 2 == 0)
+				sun.setPosition(Vector2f{ sunX + 1, sunY });
+			else if (direction % 2 == 1)
+				sun.setPosition(Vector2f{ sunX - 1, sunY });
 
 			while (accumulator >= deltaTime) {
 				while (SDL_PollEvent(&event)) {
@@ -118,8 +131,8 @@ int main(int argc, char* args[]) {
 							currentBuildingBlock = BuildingTiles::STONE;
 
 						else if (SDLK_b == event.key.keysym.sym) {
-							for (float i = 0; i < layers; i++) {
-								for (float e = 0; e < rows; e++) {
+							for (float i = 0; i < layers * 2; i++) {
+								for (float e = 0; e < rows * 2; e++) {
 									Entity skyLayer{ Vector2f{i * 32, e * 32}, skyTexture };
 									entities.insert(entities.begin(), skyLayer);
 								}
@@ -175,12 +188,12 @@ int main(int argc, char* args[]) {
 
 			const float alpha = accumulator / deltaTime;
 
-			window.render(sun);
-
 			window.clear();
 
+			window.render(sun, 4);
+
 			for (auto& entity: entities)
-				window.render(entity);
+				window.render(entity, 1);
 
 			for (auto& breakableEntity : breakableEntities)
 				window.render(breakableEntity, 1);
