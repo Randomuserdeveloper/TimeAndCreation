@@ -84,6 +84,7 @@ int main(int argc, char* args[]) {
 	float accumulator = 0.0f;
 	float currentTime = Utilities::timeInSeconds();
 	unsigned short currentBuildingBlock = 0;
+	size_t phase = 0;
 
 		while (gameRunning) {
 			int startTicks = SDL_GetTicks();
@@ -99,13 +100,17 @@ int main(int argc, char* args[]) {
 			float celestialObjectY = celestialObject.getPosition().getY();
 
 
-			if (celestialObjectX >= static_cast<float>(windowWidth) / 4) 
+			if (celestialObjectX >= static_cast<float>(windowWidth) / 4) {
 				celestialObject.setPosition(Vector2f{ -celestialObjectSize / 4, celestialObjectY });
+				phase++;
+			}
 			else
 				celestialObject.setPosition(Vector2f{ celestialObjectX + 0.25f, celestialObjectY });
 
-
-			cout << "Sun X: " << celestialObjectX << endl;
+			if (phase % 2 == 0)
+				celestialObject.setTexture(sunTexture);
+			else if (phase % 2 == 1)
+				celestialObject.setTexture(moonTexture);
 
 
 			while (accumulator >= deltaTime) {
