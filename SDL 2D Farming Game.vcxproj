@@ -161,6 +161,7 @@
     <Image Include="glass.png" />
     <Image Include="grass.png" />
     <Image Include="inventoryBox.png" />
+    <Image Include="moon.png" />
     <Image Include="sky.png" />
     <Image Include="stone.png" />
     <Image Include="stoneAndDirtTransition.png" />

@@ -39,12 +39,13 @@ int main(int argc, char* args[]) {
 	SDL_Texture * stoneBrickTexture = window.loadTexture("stoneBrick.png");
 	SDL_Texture* glassTexture = window.loadTexture("glass.png");
 	SDL_Texture* sunTexture = window.loadTexture("sun.png");
+	SDL_Texture* moonTexture = window.loadTexture("moon.png");
 
 	vector<Vector2f> buildEntityPositions;
 	vector<Entity> entities;
 	vector<BreakableEntity> breakableEntities;
 	
-	const short sunSize = 128;
+	const short celestialObjectSize = 128;
 	const float buildEntitySize = 16;
 	const short layers = 20;
 	const short rows = 12;
@@ -73,7 +74,7 @@ int main(int argc, char* args[]) {
 	//	entities.push_back(stoneLayer);
 	//}
 
-	Entity sun{ Vector2f{1, 3}, sunTexture };
+	Entity celestialObject{ Vector2f{1, 3}, sunTexture };
 
 	bool gameRunning = true;
 
@@ -83,7 +84,6 @@ int main(int argc, char* args[]) {
 	float accumulator = 0.0f;
 	float currentTime = Utilities::timeInSeconds();
 	unsigned short currentBuildingBlock = 0;
-	short direction = 0;
 
 		while (gameRunning) {
 			int startTicks = SDL_GetTicks();
@@ -95,16 +95,18 @@ int main(int argc, char* args[]) {
 
 			accumulator += frameTime;
 
-			float sunX = sun.getPosition().getX();
-			float sunY = sun.getPosition().getY();
+			float celestialObjectX = celestialObject.getPosition().getX();
+			float celestialObjectY = celestialObject.getPosition().getY();
 
-			if (sunX >= (static_cast<float>(windowWidth) - sunSize) / 4 || sunX <= 0)
-				direction++;
 
-			if (direction % 2 == 0)
-				sun.setPosition(Vector2f{ sunX + 1, sunY });
-			else if (direction % 2 == 1)
-				sun.setPosition(Vector2f{ sunX - 1, sunY });
+			if (celestialObjectX >= static_cast<float>(windowWidth) / 4) 
+				celestialObject.setPosition(Vector2f{ -celestialObjectSize / 4, celestialObjectY });
+			else
+				celestialObject.setPosition(Vector2f{ celestialObjectX + 0.25f, celestialObjectY });
+
+
+			cout << "Sun X: " << celestialObjectX << endl;
+
 
 			while (accumulator >= deltaTime) {
 				while (SDL_PollEvent(&event)) {
@@ -190,7 +192,7 @@ int main(int argc, char* args[]) {
 
 			window.clear();
 
-			window.render(sun, 4);
+			window.render(celestialObject, 4);
 
 			for (auto& entity: entities)
 				window.render(entity, 1);
