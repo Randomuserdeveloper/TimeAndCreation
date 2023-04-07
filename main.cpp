@@ -106,9 +106,9 @@ int main(int argc, char* args[]) {
 				phase++;
 			}
 			else {
-				if (celestialObjectX <= ((static_cast<float>(windowWidth) / 4) / 2) - static_cast<float>(celestialObjectSize) / 4)
+				if (celestialObjectX <= ((static_cast<float>(windowWidth) / 4) / 2) - (static_cast<float>(celestialObjectSize) / 4) / 2)
 					celestialObject.setPosition(Vector2f{ celestialObjectX + 0.5f, celestialObjectY - celestialObjectYIncrement});
-				else if (celestialObjectX > ((static_cast<float>(windowWidth) / 4) / 2) - static_cast<float>(celestialObjectSize) / 4)
+				else if (celestialObjectX > ((static_cast<float>(windowWidth) / 4) / 2) - (static_cast<float>(celestialObjectSize) / 4) / 2)
 					celestialObject.setPosition(Vector2f{ celestialObjectX + 0.5f, celestialObjectY + celestialObjectYIncrement });
 			}
 
@@ -203,10 +203,10 @@ int main(int argc, char* args[]) {
 
 			window.clear();
 
-			window.render(celestialObject, 4);
-
 			for (auto& entity: entities)
 				window.render(entity, 1);
+
+			window.render(celestialObject, 4);
 
 			for (auto& breakableEntity : breakableEntities)
 				window.render(breakableEntity, 1);
