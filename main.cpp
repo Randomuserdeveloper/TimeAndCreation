@@ -58,6 +58,8 @@ int main(int argc, char* args[]) {
 	}
 
 	Entity celestialObject{ Vector2f{1, 25}, sunTexture };
+	Entity skyLayer{ Vector2f{0, 0}, skyTexture };
+	Entity nightLayer{ Vector2f{0, 0}, nightTexture };
 
 	bool gameRunning = true;
 
@@ -70,143 +72,133 @@ int main(int argc, char* args[]) {
 	size_t phase = 0;
 	float celestialObjectYIncrement = 0.07f;
 
-		while (gameRunning) {
-			int startTicks = SDL_GetTicks();
+	while (gameRunning) {
+		int startTicks = SDL_GetTicks();
 
-			float newTime = Utilities::timeInSeconds();
-			float frameTime = newTime - currentTime;
+		float newTime = Utilities::timeInSeconds();
+		float frameTime = newTime - currentTime;
 
-			currentTime = newTime;
+		currentTime = newTime;
 
-			accumulator += frameTime;
+		accumulator += frameTime;
 
-			float celestialObjectX = celestialObject.getPosition().getX();
-			float celestialObjectY = celestialObject.getPosition().getY();
+		float celestialObjectX = celestialObject.getPosition().getX();
+		float celestialObjectY = celestialObject.getPosition().getY();
 
 
-			if (celestialObjectX >= static_cast<float>(windowWidth) / 4) {
-				celestialObject.setPosition(Vector2f{ -celestialObjectSize / 4, celestialObjectY });
-				phase++;
-			}
-			else {
-				if (celestialObjectX <= ((static_cast<float>(windowWidth) / 4) / 2) - (static_cast<float>(celestialObjectSize) / 4) / 2)
-					celestialObject.setPosition(Vector2f{ celestialObjectX + 0.5f, celestialObjectY - celestialObjectYIncrement});
-				else if (celestialObjectX > ((static_cast<float>(windowWidth) / 4) / 2) - (static_cast<float>(celestialObjectSize) / 4) / 2)
-					celestialObject.setPosition(Vector2f{ celestialObjectX + 0.5f, celestialObjectY + celestialObjectYIncrement });
-			}
+		if (celestialObjectX >= static_cast<float>(windowWidth) / 4) {
+			celestialObject.setPosition(Vector2f{ -celestialObjectSize / 4, celestialObjectY });
+			phase++;
+		}
+		else {
+			if (celestialObjectX <= ((static_cast<float>(windowWidth) / 4) / 2) - (static_cast<float>(celestialObjectSize) / 4) / 2)
+				celestialObject.setPosition(Vector2f{ celestialObjectX + 0.5f, celestialObjectY - celestialObjectYIncrement });
+			else if (celestialObjectX > ((static_cast<float>(windowWidth) / 4) / 2) - (static_cast<float>(celestialObjectSize) / 4) / 2)
+				celestialObject.setPosition(Vector2f{ celestialObjectX + 0.5f, celestialObjectY + celestialObjectYIncrement });
+		}
 
-			if (phase % 2 == 0) {
-				celestialObject.setTexture(sunTexture);
-				phase = 0;
- 			}
-			else if (phase % 2 == 1)
-				celestialObject.setTexture(moonTexture);
+		if (phase % 2 == 0) {
+			celestialObject.setTexture(sunTexture);
+			phase = 0;
+		}
+		else if (phase % 2 == 1)
+			celestialObject.setTexture(moonTexture);
 
-			while (accumulator >= deltaTime) {
-				while (SDL_PollEvent(&event)) {
-					if (event.type == SDL_QUIT)
-						gameRunning = false;
+		while (accumulator >= deltaTime) {
+			while (SDL_PollEvent(&event)) {
+				if (event.type == SDL_QUIT)
+					gameRunning = false;
 
-					if (SDL_KEYDOWN == event.type) {
-						if (SDLK_1 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingTiles::WOODPLANK;
+				if (SDL_KEYDOWN == event.type) {
+					if (SDLK_1 == event.key.keysym.sym)
+						currentBuildingBlock = BuildingTiles::WOODPLANK;
 
-						else if (SDLK_2 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingTiles::STONEBRICK;
+					else if (SDLK_2 == event.key.keysym.sym)
+						currentBuildingBlock = BuildingTiles::STONEBRICK;
 
-						else if (SDLK_3 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingTiles::GLASS;
+					else if (SDLK_3 == event.key.keysym.sym)
+						currentBuildingBlock = BuildingTiles::GLASS;
 
-						else if (SDLK_4 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingTiles::GRASS;
+					else if (SDLK_4 == event.key.keysym.sym)
+						currentBuildingBlock = BuildingTiles::GRASS;
 
-						else if (SDLK_5 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingTiles::DIRT;
+					else if (SDLK_5 == event.key.keysym.sym)
+						currentBuildingBlock = BuildingTiles::DIRT;
 
-						else if (SDLK_6 == event.key.keysym.sym)
-							currentBuildingBlock = BuildingTiles::STONE;
+					else if (SDLK_6 == event.key.keysym.sym)
+						currentBuildingBlock = BuildingTiles::STONE;
+				}
 
-						else if (SDLK_b == event.key.keysym.sym) {
-							for (float i = 0; i < layers * 2; i++) {
-								for (float e = 0; e < rows * 2; e++) {
-									Entity skyLayer{ Vector2f{i * 32, e * 32}, skyTexture };
-									Entity nightLayer{ Vector2f{i * 32, e * 32}, nightTexture };
-									if (phase % 2 == 0)
-										entities.insert(entities.begin(), skyLayer);
-									else if (phase % 2 == 1)
-										entities.insert(entities.begin(), nightLayer);
+				if (SDL_MOUSEBUTTONDOWN == event.type)
+					if (SDL_BUTTON_LEFT == event.button.button) {
+						int mouseX;
+						int mouseY;
+						SDL_GetMouseState(&mouseX, &mouseY);
+						Vector2f mousePosition{ static_cast<float>(mouseX) - buildEntitySize, static_cast<float>(mouseY) - buildEntitySize };
+						cout << "Mouse Location: " << "(" << static_cast<float>(mouseX) << ", " << static_cast<float>(mouseY) << ")" << endl;
+
+						for (auto& location : buildEntityPositions) {
+							if (location.getDistance(mousePosition) <= buildEntitySize) {
+								BreakableEntity woodPlank{ Vector2f{location}, woodPlankTexture };
+								BreakableEntity stoneBrick{ Vector2f{location}, stoneBrickTexture };
+								BreakableEntity glass{ Vector2f{ location }, glassTexture };
+								BreakableEntity grass{ Vector2f{location}, grassTexture };
+								BreakableEntity dirt{ Vector2f{location}, dirtTexture };
+								BreakableEntity stone{ Vector2f{ location }, stoneTexture };
+
+								switch (currentBuildingBlock) {
+								case 1:
+									breakableEntities.push_back(woodPlank);
+									break;
+								case 2:
+									breakableEntities.push_back(stoneBrick);
+									break;
+								case 3:
+									breakableEntities.push_back(glass);
+									break;
+								case 4:
+									breakableEntities.push_back(grass);
+									break;
+								case 5:
+									breakableEntities.push_back(dirt);
+									break;
+								case 6:
+									breakableEntities.push_back(stone);
+									break;
 								}
+
 							}
 						}
 					}
-
-					if (SDL_MOUSEBUTTONDOWN == event.type)
-						if (SDL_BUTTON_LEFT == event.button.button) {
-							int mouseX;
-							int mouseY;
-							SDL_GetMouseState(&mouseX, &mouseY);
-							Vector2f mousePosition{ static_cast<float>(mouseX) - buildEntitySize, static_cast<float>(mouseY) - buildEntitySize };
-							cout << "Mouse Location: " << "(" << static_cast<float>(mouseX) << ", " << static_cast<float>(mouseY) << ")" << endl;
-
-							for (auto& location : buildEntityPositions) {
-								if (location.getDistance(mousePosition) <= buildEntitySize) {
-									BreakableEntity woodPlank{ Vector2f{location}, woodPlankTexture };
-									BreakableEntity stoneBrick{ Vector2f{location}, stoneBrickTexture };
-									BreakableEntity glass { Vector2f{ location }, glassTexture };
-									BreakableEntity grass{ Vector2f{location}, grassTexture };
-									BreakableEntity dirt{ Vector2f{location}, dirtTexture };
-									BreakableEntity stone{ Vector2f{ location }, stoneTexture };
-
-									switch (currentBuildingBlock) {
-									case 1:
-										breakableEntities.push_back(woodPlank);
-										break;
-									case 2:
-										breakableEntities.push_back(stoneBrick);
-										break;
-									case 3:
-										breakableEntities.push_back(glass);
-										break;
-									case 4:
-										breakableEntities.push_back(grass);
-										break;
-									case 5:
-										breakableEntities.push_back(dirt);
-										break;
-									case 6:
-										breakableEntities.push_back(stone);
-										break;
-									}
-
-								}
-							}
-						}
-				}
-
-				accumulator -= deltaTime;
 			}
 
-			const float alpha = accumulator / deltaTime;
+			accumulator -= deltaTime;
+		}
 
-			window.clear();
+		const float alpha = accumulator / deltaTime;
 
-			for (auto& entity: entities)
-				window.render(entity, 1);
+		window.clear();
 
-			window.render(celestialObject, 4);
+		if (phase % 2 == 0)
+			window.render(skyLayer, 40);
+		else if (phase % 2 == 1)
+			window.render(nightLayer, 40);
 
-			for (auto& breakableEntity : breakableEntities)
-				window.render(breakableEntity, 1);
+		for (auto& entity : entities)
+			window.render(entity, 1);
 
-			window.display();
+		window.render(celestialObject, 4);
 
-			int frameTicks = SDL_GetTicks() - startTicks;
+		for (auto& breakableEntity : breakableEntities)
+			window.render(breakableEntity, 1);
 
-			if (frameTicks < 1000 / window.getRefreshRate())
-				SDL_Delay(1000 / window.getRefreshRate() - frameTicks);
+		window.display();
 
-			}
+		int frameTicks = SDL_GetTicks() - startTicks;
 
+		if (frameTicks < 1000 / window.getRefreshRate())
+			SDL_Delay(1000 / window.getRefreshRate() - frameTicks);
+	}
 		SDL_Quit();
 		return 0;
 }
