@@ -74,7 +74,7 @@ int main(int argc, char* args[]) {
 	//	entities.push_back(stoneLayer);
 	//}
 
-	Entity celestialObject{ Vector2f{1, 3}, sunTexture };
+	Entity celestialObject{ Vector2f{1, 25}, sunTexture };
 
 	bool gameRunning = true;
 
@@ -85,6 +85,7 @@ int main(int argc, char* args[]) {
 	float currentTime = Utilities::timeInSeconds();
 	unsigned short currentBuildingBlock = 0;
 	size_t phase = 0;
+	float celestialObjectYIncrement = 0.07f;
 
 		while (gameRunning) {
 			int startTicks = SDL_GetTicks();
@@ -104,18 +105,19 @@ int main(int argc, char* args[]) {
 				celestialObject.setPosition(Vector2f{ -celestialObjectSize / 4, celestialObjectY });
 				phase++;
 			}
-			else
-				celestialObject.setPosition(Vector2f{ celestialObjectX + 0.25f, celestialObjectY });
+			else {
+				if (celestialObjectX <= ((static_cast<float>(windowWidth) / 4) / 2) - static_cast<float>(celestialObjectSize) / 4)
+					celestialObject.setPosition(Vector2f{ celestialObjectX + 0.5f, celestialObjectY - celestialObjectYIncrement});
+				else if (celestialObjectX > ((static_cast<float>(windowWidth) / 4) / 2) - static_cast<float>(celestialObjectSize) / 4)
+					celestialObject.setPosition(Vector2f{ celestialObjectX + 0.5f, celestialObjectY + celestialObjectYIncrement });
+			}
 
 			if (phase % 2 == 0) {
 				celestialObject.setTexture(sunTexture);
 				phase = 0;
  			}
-
 			else if (phase % 2 == 1)
 				celestialObject.setTexture(moonTexture);
-
-			cout << "Phase: " << phase << endl;
 
 			while (accumulator >= deltaTime) {
 				while (SDL_PollEvent(&event)) {
