@@ -40,6 +40,7 @@ int main(int argc, char* args[]) {
 	SDL_Texture* glassTexture = window.loadTexture("glass.png");
 	SDL_Texture* sunTexture = window.loadTexture("sun.png");
 	SDL_Texture* moonTexture = window.loadTexture("moon.png");
+	SDL_Texture* nightTexture = window.loadTexture("night.png");
 
 	vector<Vector2f> buildEntityPositions;
 	vector<Entity> entities;
@@ -55,24 +56,6 @@ int main(int argc, char* args[]) {
 			buildEntityPositions.push_back(Vector2f{ i * (buildEntitySize * 2), j * (buildEntitySize * 2) });
 		}
 	}
-
-	//for (float i = 0; i < layers; i++) {
-	//	for (float e = 0; e < 7; e++) {
-	//		Entity skyLayer{ Vector2f{i * 32, e * 32}, skyTexture };
-	//		entities.push_back(skyLayer);
-	//	}
-
-	//	Entity grassLayer{Vector2f{i * 32, 200.0}, grassTexture};
-	//	entities.push_back(grassLayer);
-	//	Entity dirtLayer1{ Vector2f{i * 32, 232}, dirtTexture };
-	//	entities.push_back(dirtLayer1);
-	//	Entity dirtLayer2{ Vector2f{i * 32, 264}, dirtTexture };
-	//	entities.push_back(dirtLayer2);
-	//	Entity stoneAndDirtLayer{ Vector2f{i * 32, 296}, stoneDirtTransistionTexture };
-	//	entities.push_back(stoneAndDirtLayer);
-	//	Entity stoneLayer{ Vector2f{i * 32, 328}, stoneTexture };
-	//	entities.push_back(stoneLayer);
-	//}
 
 	Entity celestialObject{ Vector2f{1, 25}, sunTexture };
 
@@ -147,7 +130,11 @@ int main(int argc, char* args[]) {
 							for (float i = 0; i < layers * 2; i++) {
 								for (float e = 0; e < rows * 2; e++) {
 									Entity skyLayer{ Vector2f{i * 32, e * 32}, skyTexture };
-									entities.insert(entities.begin(), skyLayer);
+									Entity nightLayer{ Vector2f{i * 32, e * 32}, nightTexture };
+									if (phase % 2 == 0)
+										entities.insert(entities.begin(), skyLayer);
+									else if (phase % 2 == 1)
+										entities.insert(entities.begin(), nightLayer);
 								}
 							}
 						}
