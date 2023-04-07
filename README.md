@@ -1,2 +1,3 @@
 # Time And Creation
-A Sandbox/Simulation Game created using C++ and SDL2.
+Time and Creation is a Sandbox/Simulation Game that allows the player to create 2D structures out of sprites. The image below is an example of a user created structure.
+![alt text](https://github.com/Randomuserdeveloper/TimeAndCreation/blob/master/thumbnail.png?raw=true)
