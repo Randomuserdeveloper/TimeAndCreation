@@ -135,7 +135,6 @@ int main(int argc, char* args[]) {
 						int mouseY;
 						SDL_GetMouseState(&mouseX, &mouseY);
 						Vector2f mousePosition{ static_cast<float>(mouseX) - buildEntitySize, static_cast<float>(mouseY) - buildEntitySize };
-						cout << "Mouse Location: " << "(" << static_cast<float>(mouseX) << ", " << static_cast<float>(mouseY) << ")" << endl;
 
 						for (auto& location : buildEntityPositions) {
 							if (location.getDistance(mousePosition) <= buildEntitySize) {
