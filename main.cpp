@@ -67,10 +67,13 @@ int main(int argc, char* args[]) {
 
 	const float deltaTime = 0.01f;
 	float accumulator = 0.0f;
-	float currentTime = Utilities::timeInSeconds();
+	float currentTime = Utilities::timeInSeconds();	
 	unsigned short currentBuildingBlock = 0;
 	size_t phase = 0;
-	float celestialObjectYIncrement = 0.07f;
+	float celestialObjectYIncrement = 0; // Change value for Sun/Moon upwards motion (arc)
+	const int minutesPerDay = 1440;
+	const float celestialObjectXIncrement = minutesPerDay / windowWidth;
+	float gameTime = 0;
 
 	while (gameRunning) {
 		int startTicks = SDL_GetTicks();
@@ -88,13 +91,20 @@ int main(int argc, char* args[]) {
 
 		if (celestialObjectX >= static_cast<float>(windowWidth) / 4) {
 			celestialObject.setPosition(Vector2f{ -celestialObjectSize / 4, celestialObjectY });
+			gameTime = 0;
 			phase++;
 		}
 		else {
-			if (celestialObjectX <= ((static_cast<float>(windowWidth) / 4) / 2) - (static_cast<float>(celestialObjectSize) / 4) / 2)
-				celestialObject.setPosition(Vector2f{ celestialObjectX + 0.5f, celestialObjectY - celestialObjectYIncrement });
-			else if (celestialObjectX > ((static_cast<float>(windowWidth) / 4) / 2) - (static_cast<float>(celestialObjectSize) / 4) / 2)
-				celestialObject.setPosition(Vector2f{ celestialObjectX + 0.5f, celestialObjectY + celestialObjectYIncrement });
+			if (celestialObjectX <= ((static_cast<float>(windowWidth) / 4) / 2) - (static_cast<float>(celestialObjectSize) / 4) / 2) {
+				// Every time the sun/moon moves it's moved by minutesPerDay / windowWidth (on the x-axis). So, the sun can move 1440 time per day (minutes per day) and increment one minute to the gameTime.
+				celestialObject.setPosition(Vector2f{ celestialObjectX + celestialObjectXIncrement, celestialObjectY - celestialObjectYIncrement });
+				gameTime = 1;
+			}
+			else if (celestialObjectX > ((static_cast<float>(windowWidth) / 4) / 2) - (static_cast<float>(celestialObjectSize) / 4) / 2) {
+				// Every time the sun/moon moves it's moved by minutesPerDay / windowWidth (on the x-axis). So, the sun can move 1440 time per day (minutes per day) and increment one minute to the gameTime.
+				celestialObject.setPosition(Vector2f{ celestialObjectX + celestialObjectXIncrement, celestialObjectY + celestialObjectYIncrement });
+				gameTime = 1;
+			}	
 		}
 
 		if (phase % 2 == 0) {
